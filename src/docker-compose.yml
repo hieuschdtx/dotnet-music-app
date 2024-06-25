@@ -1,0 +1,6 @@
+﻿services:
+  music_app.api:
+    image: music_app.api
+    build:
+      context: .
+      dockerfile: Music_app.Api/Dockerfile
