@@ -1,8 +1,9 @@
 ﻿using System.Reflection;
 
-namespace Music_app.Domain;
-
-public static class AssemblyReference
+namespace Music_app.Domain
 {
-    public static readonly Assembly assembly = typeof(AssemblyReference).Assembly;
+    public static class AssemblyReference
+    {
+        public static readonly Assembly assembly = typeof(AssemblyReference).Assembly;
+    }
 }

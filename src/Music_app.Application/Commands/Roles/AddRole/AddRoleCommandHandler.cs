@@ -2,28 +2,29 @@
 using Music_app.Domain.Interfaces;
 using Music_app.Domain.Models;
 
-namespace Music_app.Application.Commands.Roles.AddRole;
-
-public class AddRoleCommandHandler : ICommandHandler<AddRoleCommand, ResponseBase>
+namespace Music_app.Application.Commands.Roles.AddRole
 {
-    private readonly IRoleRepository _roleRepository;
-
-    public AddRoleCommandHandler(IRoleRepository roleRepository)
+    public class AddRoleCommandHandler : ICommandHandler<AddRoleCommand, ResponseBase>
     {
-        _roleRepository = roleRepository;
-    }
+        private readonly IRoleRepository _roleRepository;
 
-    public async Task<ResponseBase> Handle(AddRoleCommand request, CancellationToken cancellationToken)
-    {
-        var newRole = new Domain.Entities.Roles(
-            request.id,
-            request.name,
-            request.description,
-            request.disable);
+        public AddRoleCommandHandler(IRoleRepository roleRepository)
+        {
+            _roleRepository = roleRepository;
+        }
 
-        await _roleRepository.AddAsync(newRole);
-        await _roleRepository.UnitOfWork.SaveEntitiesAsync(cancellationToken);
+        public async Task<ResponseBase> Handle(AddRoleCommand request, CancellationToken cancellationToken)
+        {
+            var newRole = new Domain.Entities.Roles(
+                request.id,
+                request.name,
+                request.description,
+                request.disable);
 
-        return new ResponseBase("success", "Add successfully");
+            await _roleRepository.AddAsync(newRole);
+            await _roleRepository.UnitOfWork.SaveEntitiesAsync(cancellationToken);
+
+            return new ResponseBase("success", "Add successfully");
+        }
     }
 }

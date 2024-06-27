@@ -4,51 +4,54 @@ using MediatR;
 using Microsoft.Extensions.Logging;
 using Music_app.Domain.Exceptions;
 
-namespace Music_app.Application.Behaviors;
-
-public class ValidationPipelineBehavior<TRequest, TResponse> : IPipelineBehavior<TRequest, TResponse>
-    where TRequest : notnull
+namespace Music_app.Application.Behaviors
 {
-    private readonly ILogger<ValidationPipelineBehavior<TRequest, TResponse>> _logger;
-    private readonly IEnumerable<IValidator<TRequest>> _validators;
-
-    public ValidationPipelineBehavior(ILogger<ValidationPipelineBehavior<TRequest, TResponse>> logger,
-        IEnumerable<IValidator<TRequest>> validators)
+    public class ValidationPipelineBehavior<TRequest, TResponse> : IPipelineBehavior<TRequest, TResponse>
+        where TRequest : notnull
     {
-        _logger = logger;
-        _validators = validators;
-    }
+        private readonly ILogger<ValidationPipelineBehavior<TRequest, TResponse>> _logger;
+        private readonly IEnumerable<IValidator<TRequest>> _validators;
 
-    public async Task<TResponse> Handle(TRequest request, RequestHandlerDelegate<TResponse> next,
-        CancellationToken cancellationToken)
-    {
-        var typeName = typeof(TRequest).Name;
-        _logger.LogInformation("----- Validating command {CommandType}", typeName);
-
-        if(!_validators.Any())
+        public ValidationPipelineBehavior(ILogger<ValidationPipelineBehavior<TRequest, TResponse>> logger,
+            IEnumerable<IValidator<TRequest>> validators)
         {
-            _logger.LogWarning("No validators found for command {CommandType}", typeName);
-            return await next();
+            _logger = logger;
+            _validators = validators;
         }
 
-        var validationFailures = new List<ValidationFailure>();
-
-        foreach(var validator in _validators)
+        public async Task<TResponse> Handle(TRequest request, RequestHandlerDelegate<TResponse> next,
+            CancellationToken cancellationToken)
         {
-            var validationResult = await validator.
-                ValidateAsync(new ValidationContext<TRequest>(request), cancellationToken);
-            validationFailures.AddRange(validationResult.Errors);
+            var typeName = typeof(TRequest).Name;
+            _logger.LogInformation("----- Validating command {CommandType}", typeName);
+
+            if (!_validators.Any())
+            {
+                _logger.LogWarning("No validators found for command {CommandType}", typeName);
+                return await next();
+            }
+
+            var validationFailures = new List<ValidationFailure>();
+
+            foreach (var validator in _validators)
+            {
+                var validationResult =
+                    await validator.ValidateAsync(new ValidationContext<TRequest>(request), cancellationToken);
+                validationFailures.AddRange(validationResult.Errors);
+            }
+
+            if (validationFailures.Count == 0)
+            {
+                return await next();
+            }
+
+            _logger.LogError("Command validation failed: {CommandType}", typeName);
+
+            var errors = validationFailures
+                .Select(failure => new InvalidValidationItemDto(failure.PropertyName, failure.ErrorMessage))
+                .ToList();
+
+            throw new InvalidValidationException(errors[0].code, errors[0].message, errors);
         }
-
-        if(validationFailures.Count == 0)
-            return await next();
-        _logger.LogError("Command validation failed: {CommandType}", typeName);
-
-        var errors = validationFailures
-            .Select(failure => new InvalidValidationItemDto(failure.PropertyName, failure.ErrorMessage))
-            .ToList();
-
-        throw new InvalidValidationException(errors[0].code, errors[0].message, errors);
-
     }
 }

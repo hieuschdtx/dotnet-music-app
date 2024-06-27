@@ -1,20 +1,22 @@
 ﻿using System.Net;
 
-namespace Music_app.Domain.Exceptions;
-
-public class BusinessRuleException : BaseDomainException
+namespace Music_app.Domain.Exceptions
 {
-    public BusinessRuleException(string code, string message) : base(code, message)
+    public class BusinessRuleException : BaseDomainException
     {
-    }
+        public BusinessRuleException(string code, string message) : base(code, message)
+        {
+        }
 
-    public BusinessRuleException(string code, string message, HttpStatusCode statusCode = HttpStatusCode.BadRequest) :
-        base(code, message, statusCode)
-    {
-    }
+        public BusinessRuleException(string code, string message,
+            HttpStatusCode statusCode = HttpStatusCode.BadRequest) :
+            base(code, message, statusCode)
+        {
+        }
 
-    public override dynamic GetMessage()
-    {
-        return new { code, message = Message };
+        public override dynamic GetMessage()
+        {
+            return new { code, message = Message };
+        }
     }
 }

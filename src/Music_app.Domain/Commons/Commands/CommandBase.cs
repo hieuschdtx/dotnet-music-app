@@ -1,42 +1,43 @@
-﻿namespace Music_app.Domain.Commons.Commands;
-
-public class CommandBase : ICommand
+﻿namespace Music_app.Domain.Commons.Commands
 {
-    public CommandBase()
+    public class CommandBase : ICommand
     {
-        id = Guid.NewGuid();
+        public CommandBase()
+        {
+            id = Guid.NewGuid();
+        }
+
+        public CommandBase(Guid id)
+        {
+            this.id = id;
+        }
+
+        public Guid id { get; }
     }
 
-    public CommandBase(Guid id)
+    public abstract class CommandBase<TResponse> : ICommand<TResponse>
     {
-        this.id = id;
-    }
+        protected CommandBase()
+        {
+            id = Guid.NewGuid();
+        }
 
-    public Guid id { get; }
-}
+        protected CommandBase(Guid id)
+        {
+            this.id = id;
+        }
 
-public abstract class CommandBase<TResponse> : ICommand<TResponse>
-{
-    protected CommandBase()
-    {
-        id = Guid.NewGuid();
-    }
+        public Guid userId { get; private set; }
+        public Guid id { get; private set; }
 
-    protected CommandBase(Guid id)
-    {
-        this.id = id;
-    }
+        public void SetUserId(Guid userId)
+        {
+            this.userId = userId;
+        }
 
-    public Guid userId { get; private set; }
-    public Guid id { get; private set; }
-
-    public void SetUserId(Guid userId)
-    {
-        this.userId = userId;
-    }
-
-    public void SetId(Guid id)
-    {
-        this.id = id;
+        public void SetId(Guid id)
+        {
+            this.id = id;
+        }
     }
 }
