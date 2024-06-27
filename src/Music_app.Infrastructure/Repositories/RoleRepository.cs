@@ -2,11 +2,12 @@
 using Music_app.Domain.Interfaces;
 using Music_app.Infrastructure.Data;
 
-namespace Music_app.Infrastructure.Repositories;
-
-public class RoleRepository : Repository<Roles>, IRoleRepository
+namespace Music_app.Infrastructure.Repositories
 {
-    public RoleRepository(MusicDbContext context) : base(context)
+    public class RoleRepository : Repository<Roles>, IRoleRepository
     {
+        public RoleRepository(MusicDbContext context) : base(context)
+        {
+        }
     }
 }

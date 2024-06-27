@@ -1,30 +1,31 @@
 ﻿using MediatR;
 using Microsoft.Extensions.Logging;
 
-namespace Music_app.Application.Behaviors;
-
-public class LoggingPipelineBehavior<TRequest, TResponse> : IPipelineBehavior<TRequest, TResponse>
-    where TRequest : notnull
+namespace Music_app.Application.Behaviors
 {
-    private readonly ILogger<LoggingPipelineBehavior<TRequest, TResponse>> _logger;
-
-    public LoggingPipelineBehavior(ILogger<LoggingPipelineBehavior<TRequest, TResponse>> logger)
+    public class LoggingPipelineBehavior<TRequest, TResponse> : IPipelineBehavior<TRequest, TResponse>
+        where TRequest : notnull
     {
-        _logger = logger ?? throw new ArgumentException(nameof(ILogger));
-        ;
-    }
+        private readonly ILogger<LoggingPipelineBehavior<TRequest, TResponse>> _logger;
 
-    public async Task<TResponse> Handle(TRequest request, RequestHandlerDelegate<TResponse> next,
-        CancellationToken cancellationToken)
-    {
-        _logger.LogInformation("Handling {RequestName} with payload: {@Request}", typeof(TRequest).Name, request);
+        public LoggingPipelineBehavior(ILogger<LoggingPipelineBehavior<TRequest, TResponse>> logger)
+        {
+            _logger = logger ?? throw new ArgumentException(nameof(ILogger));
+            ;
+        }
 
-        // Call the next delegate/middleware in the pipeline
-        var response = await next();
+        public async Task<TResponse> Handle(TRequest request, RequestHandlerDelegate<TResponse> next,
+            CancellationToken cancellationToken)
+        {
+            _logger.LogInformation("Handling {RequestName} with payload: {@Request}", typeof(TRequest).Name, request);
 
-        // Log response
-        _logger.LogInformation("Handled {RequestName} with response: {@Response}", typeof(TRequest).Name, response);
+            // Call the next delegate/middleware in the pipeline
+            var response = await next();
 
-        return response;
+            // Log response
+            _logger.LogInformation("Handled {RequestName} with response: {@Response}", typeof(TRequest).Name, response);
+
+            return response;
+        }
     }
 }

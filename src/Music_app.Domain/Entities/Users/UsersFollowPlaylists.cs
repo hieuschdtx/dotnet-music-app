@@ -1,25 +1,26 @@
-namespace Music_app.Domain.Entities;
-
-public class UsersFollowPlaylists
+namespace Music_app.Domain.Entities
 {
-    public UsersFollowPlaylists()
+    public class UsersFollowPlaylists
     {
-        #region Generated Constructor
+        public UsersFollowPlaylists()
+        {
+            #region Generated Constructor
+
+            #endregion
+        }
+
+        #region Generated Properties
+
+        public Guid user_id { get; set; }
+        public Guid playlist_id { get; set; }
+
+        #endregion
+
+        #region Generated Relationships
+
+        public virtual Playlists playlist_Playlists { get; set; }
+        public virtual Users user_Users { get; set; }
 
         #endregion
     }
-
-    #region Generated Properties
-
-    public Guid user_id { get; set; }
-    public Guid playlist_id { get; set; }
-
-    #endregion
-
-    #region Generated Relationships
-
-    public virtual Playlists playlist_Playlists { get; set; }
-    public virtual Users user_Users { get; set; }
-
-    #endregion
 }
