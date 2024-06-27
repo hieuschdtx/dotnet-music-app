@@ -2,12 +2,13 @@
 using Music_app.Domain.Entities;
 using Music_app.Domain.Models;
 
-namespace Music_app.Application.Configurations;
-
-public class MapperProfile : Profile
+namespace Music_app.Application.Configurations
 {
-    public MapperProfile()
+    public class MapperProfile : Profile
     {
-        CreateMap<Roles, RoleDto>().ReverseMap();
+        public MapperProfile()
+        {
+            CreateMap<Roles, RoleDto>().ReverseMap();
+        }
     }
 }

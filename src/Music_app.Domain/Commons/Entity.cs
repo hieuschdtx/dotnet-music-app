@@ -1,31 +1,32 @@
-﻿namespace Music_app.Domain.Commons;
-
-public abstract class Entity
+﻿namespace Music_app.Domain.Commons
 {
-    private Guid _id;
-
-    public virtual Guid id
+    public abstract class Entity
     {
-        get => _id;
-        protected set => _id = value;
-    }
+        private Guid _id;
 
-    public DateTime created_at { get; private set; }
-    public DateTime modified_at { get; private set; }
+        public virtual Guid id
+        {
+            get => _id;
+            protected set => _id = value;
+        }
 
-    public void UpdateModifiedTime()
-    {
-        modified_at = DateTime.Now;
-    }
+        public DateTime created_at { get; private set; }
+        public DateTime modified_at { get; private set; }
 
-    public void CreateTime()
-    {
-        created_at = DateTime.Now;
-    }
+        public void UpdateModifiedTime()
+        {
+            modified_at = DateTime.Now;
+        }
 
-    public static DateTime SetDateTimeWithoutTimeZone(DateTime dateTime)
-    {
-        return DateTime.SpecifyKind(dateTime, DateTimeKind.Unspecified);
+        public void CreateTime()
+        {
+            created_at = DateTime.Now;
+        }
+
+        public static DateTime SetDateTimeWithoutTimeZone(DateTime dateTime)
+        {
+            return DateTime.SpecifyKind(dateTime, DateTimeKind.Unspecified);
+        }
+        // public static DateOnly ParsedDob(string date) => DateOnly.Parse(date);
     }
-    // public static DateOnly ParsedDob(string date) => DateOnly.Parse(date);
 }

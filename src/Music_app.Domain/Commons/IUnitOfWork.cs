@@ -1,6 +1,7 @@
-﻿namespace Music_app.Domain.Commons;
-
-public interface IUnitOfWork : IDisposable
+﻿namespace Music_app.Domain.Commons
 {
-    Task<bool> SaveEntitiesAsync(CancellationToken cancellationToken = default);
+    public interface IUnitOfWork : IDisposable
+    {
+        Task<bool> SaveEntitiesAsync(CancellationToken cancellationToken = default);
+    }
 }
