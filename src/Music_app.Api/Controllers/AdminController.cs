@@ -11,22 +11,22 @@ namespace Music_app.Api.Controllers
     [Route("api/admin")]
     public class AdminController : BaseController
     {
-        public AdminController(IMediator mediator, IAuthorizationService authorizationService) : 
+        public AdminController(IMediator mediator, IAuthorizationService authorizationService) :
             base(mediator, authorizationService)
         {
         }
-        
+
         [HttpPost("create")]
-        [Authorize(policy:RoleConst.Manager)]
+        [Authorize(policy: RoleConst.Manager)]
         [ProducesResponseType((int)HttpStatusCode.Created)]
         public async Task<IActionResult> CreateAdminAsync([FromBody] AddRoleCommand command)
         {
             var resp = await _mediator.Send(command);
             return Ok(resp);
         }
-        
+
         [HttpPost("login")]
-        [Authorize(policy:RoleConst.Manager)]
+        [Authorize(policy: RoleConst.Manager)]
         [ProducesResponseType((int)HttpStatusCode.OK)]
         public async Task<IActionResult> LoginAdminAsync([FromBody] AddRoleCommand command)
         {

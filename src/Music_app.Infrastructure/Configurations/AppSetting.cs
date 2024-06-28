@@ -16,7 +16,6 @@ namespace Music_app.Infrastructure.Configurations
         public string Name { get; set; } = CookieAuthenticationDefaults.AuthenticationScheme;
         public string SameSite { get; set; } = "Lax";
         public bool SecurePolicy { get; set; } = true;
-
         public int Expires { get; set; } = 1;
         // None/Lax/Strict
     }

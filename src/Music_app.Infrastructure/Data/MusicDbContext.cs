@@ -24,9 +24,9 @@ namespace Music_app.Infrastructure.Data
             {
                 await base.SaveChangesAsync(cancellationToken);
             }
-            catch (DbUpdateException ex)
+            catch (DbUpdateException)
             {
-                throw ex;
+                throw;
             }
 
             return true;
@@ -63,7 +63,7 @@ namespace Music_app.Infrastructure.Data
         {
             if (_currentTransaction != null)
             {
-                return null;
+                return null!;
             }
 
             _currentTransaction = await Database.BeginTransactionAsync(IsolationLevel.ReadCommitted);
@@ -95,7 +95,7 @@ namespace Music_app.Infrastructure.Data
                 if (_currentTransaction != null)
                 {
                     _currentTransaction.Dispose();
-                    _currentTransaction = null;
+                    _currentTransaction = null!;
                 }
             }
         }
@@ -116,7 +116,7 @@ namespace Music_app.Infrastructure.Data
                 if (_currentTransaction != null)
                 {
                     _currentTransaction.Dispose();
-                    _currentTransaction = null;
+                    _currentTransaction = null!;
                 }
             }
         }

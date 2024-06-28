@@ -57,64 +57,65 @@ namespace Music_app.Api.Configurations
             return services;
         }
 
-        public static IServiceCollection AddAuthentication(this IServiceCollection services,AppSetting appSetting)
+        public static IServiceCollection AddAuthentication(this IServiceCollection services, AppSetting appSetting)
         {
-           services.AddAuthentication(options =>
+            services.AddAuthentication(options =>
+                 {
+                     options.DefaultAuthenticateScheme = appSetting.jwtBearerSetting.Name;
+                     options.DefaultChallengeScheme = appSetting.jwtBearerSetting.Name;
+                 })
+                 .AddJwtBearer()
+                 .AddCookie(appSetting.cookieSettings.Name, options =>
+                 {
+                     options.SlidingExpiration = true;
+                     options.Cookie.Name = appSetting.cookieSettings.Name;
+                     options.Cookie.Domain = appSetting.cookieSettings.Domain;
+                     options.Cookie.HttpOnly = appSetting.cookieSettings.HttpOnly;
+                     options.Cookie.SameSite = appSetting.cookieSettings.SameSite == "Lax" ? SameSiteMode.Lax : SameSiteMode.None;
+                     options.Cookie.SecurePolicy = appSetting.cookieSettings.SecurePolicy
+                         ? CookieSecurePolicy.Always
+                         : CookieSecurePolicy.None;
+                     options.Cookie.Expiration = TimeSpan.FromDays(appSetting.cookieSettings.Expires);
+                 });
+
+            services.AddAuthorization(options =>
+            {
+                var builder = new AuthorizationPolicyBuilder(
+                    appSetting.jwtBearerSetting.Name,
+                    appSetting.cookieSettings.Name
+                );
+
+                builder = builder.RequireAuthenticatedUser();
+                options.DefaultPolicy = builder.Build();
+
+                options.AddPolicy(RoleConst.Guest, policy =>
                 {
-                    options.DefaultAuthenticateScheme = appSetting.jwtBearerSetting.Name; 
-                })
-                .AddJwtBearer()
-                .AddCookie(appSetting.cookieSettings.Name, options =>
-                {
-                    options.SlidingExpiration = true;
-                    options.Cookie.Name = appSetting.cookieSettings.Name;
-                    options.Cookie.Domain = appSetting.cookieSettings.Domain;
-                    options.Cookie.HttpOnly = appSetting.cookieSettings.HttpOnly;
-                    options.Cookie.SameSite = appSetting.cookieSettings.SameSite == "Lax" ? SameSiteMode.Lax : SameSiteMode.None;
-                    options.Cookie.SecurePolicy = appSetting.cookieSettings.SecurePolicy
-                        ? CookieSecurePolicy.Always
-                        : CookieSecurePolicy.None;
-                    options.Cookie.Expiration = TimeSpan.FromDays(appSetting.cookieSettings.Expires);
+                    policy.RequireRole(RoleConst.Manager, RoleConst.Administrator, RoleConst.Guest)
+                        .AddAuthenticationSchemes(appSetting.cookieSettings.Name);
                 });
-           
-           services.AddAuthorization(options =>
-           {
-               var builder = new AuthorizationPolicyBuilder(
-                   appSetting.jwtBearerSetting.Name,
-                   appSetting.cookieSettings.Name
-               );
-        
-               builder = builder.RequireAuthenticatedUser();
-               options.DefaultPolicy = builder.Build();
-        
-               options.AddPolicy(RoleConst.Guest, policy =>
-               {
-                   policy.RequireRole(RoleConst.Manager, RoleConst.Administrator, RoleConst.Guest)
-                       .AddAuthenticationSchemes(appSetting.cookieSettings.Name);
-               });
-        
-               options.AddPolicy(RoleConst.Employee, policy =>
-               {
-                   policy.RequireRole(RoleConst.Manager, RoleConst.Administrator, RoleConst.Employee)
-                       .AddAuthenticationSchemes(appSetting.cookieSettings.Name);
-               });
-        
-               options.AddPolicy(RoleConst.Manager, policy =>
-               {
-                   policy.RequireRole(RoleConst.Manager, RoleConst.Administrator)
-                       .AddAuthenticationSchemes(appSetting.cookieSettings.Name);
-               });
-        
-               options.AddPolicy(RoleConst.Administrator, policy =>
-               {
-                   policy.RequireRole(RoleConst.Administrator)
-                       .AddAuthenticationSchemes(appSetting.cookieSettings.Name);
-               });
-           });
-            
+
+                options.AddPolicy(RoleConst.Employee, policy =>
+                {
+                    policy.RequireRole(RoleConst.Manager, RoleConst.Administrator, RoleConst.Employee)
+                        .AddAuthenticationSchemes(appSetting.cookieSettings.Name);
+                });
+
+                options.AddPolicy(RoleConst.Manager, policy =>
+                {
+                    policy.RequireRole(RoleConst.Manager, RoleConst.Administrator)
+                        .AddAuthenticationSchemes(appSetting.cookieSettings.Name);
+                });
+
+                options.AddPolicy(RoleConst.Administrator, policy =>
+                {
+                    policy.RequireRole(RoleConst.Administrator)
+                        .AddAuthenticationSchemes(appSetting.cookieSettings.Name);
+                });
+            });
+
             services.ConfigureOptions<AuthOptionConfiguration>();
             services.ConfigureOptions<JwtBearerConfiguration>();
-            
+
             return services;
         }
     }

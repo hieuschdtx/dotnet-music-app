@@ -13,7 +13,7 @@ namespace Music_app.Api.Controllers
         private string? _currentUserId = null;
         private string? _refreshToken = null;
 
-        public BaseController(IMediator mediator,IAuthorizationService authorizationService)
+        public BaseController(IMediator mediator, IAuthorizationService authorizationService)
         {
             _mediator = mediator;
             _authorizationService = authorizationService;

@@ -505,6 +505,9 @@ obj/
 .idea/
 /.idea
 
+.vscode/
+/.vscode
+
 # Logs file
 Logs/*
 /Logs

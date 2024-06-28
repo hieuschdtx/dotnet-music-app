@@ -10,7 +10,7 @@ namespace Music_app.Api.Configurations
         private readonly AuthOption _authOption;
         private readonly AuthValidation _authValidation;
 
-        public JwtBearerConfiguration(IOptions<AuthOption> authOption,AuthValidation authValidation)
+        public JwtBearerConfiguration(IOptions<AuthOption> authOption, AuthValidation authValidation)
         {
             _authOption = authOption.Value;
             _authValidation = authValidation;
