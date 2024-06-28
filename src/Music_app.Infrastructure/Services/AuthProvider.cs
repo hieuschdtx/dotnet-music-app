@@ -16,7 +16,7 @@ namespace Music_app.Infrastructure.Services
         private readonly IHttpContextAccessor _httpContextAccessor;
         private readonly AuthOption _authOption;
         private readonly AuthValidation _authValidation;
-        
+
         public AuthProvider(
             IOptions<AuthOption> authOption,
             IHttpContextAccessor httpContextAccessor,
@@ -26,10 +26,10 @@ namespace Music_app.Infrastructure.Services
             _httpContextAccessor = httpContextAccessor;
             _authValidation = authValidation;
         }
-        
+
         public string GenerateAccessTokenAsync(ClaimTypeDto claim)
         {
-            var claims = new Claim[ ]
+            var claims = new Claim[]
             {
                 new(ClaimTypeConst.Id, claim.id),
                 new(ClaimTypeConst.UserName, claim.user_name),
@@ -38,7 +38,7 @@ namespace Music_app.Infrastructure.Services
                 new(ClaimTypes.Role, claim.role),
                 new(ClaimTypeConst.RefreshToken, claim.refresh_token)
             };
-            
+
             // var identity = new ClaimsIdentity(claims, _appSetting.cookieSettings.Name);
             var token = new JwtSecurityToken(
                 _authOption.Issuer,
@@ -47,9 +47,9 @@ namespace Music_app.Infrastructure.Services
                 null,
                 DateTime.UtcNow.AddHours(_authValidation.ExpireTime),
                 _authValidation.GetSigning());
-            
+
             var accessToken = new JwtSecurityTokenHandler().WriteToken(token);
-            
+
             // await SigningAsync(identity);
             SaveCookiesStorage(accessToken);
             return accessToken;
