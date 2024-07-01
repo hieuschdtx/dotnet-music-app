@@ -1,7 +1,8 @@
 ﻿using Music_app.Domain.Commons.Commands;
+using Music_app.Domain.Enums;
 using Music_app.Domain.Models;
 
-namespace Music_app.Application.Commands.Roles.AddRole
+namespace Music_app.Application.Commands.Roles.Add
 {
     public class AddRoleCommand : CommandBase<ResponseBase>
     {

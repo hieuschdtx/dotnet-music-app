@@ -1,4 +1,5 @@
 ﻿using Music_app.Domain.Entities;
+using Music_app.Domain.Enums;
 using Music_app.Domain.Interfaces;
 using Music_app.Infrastructure.Data;
 

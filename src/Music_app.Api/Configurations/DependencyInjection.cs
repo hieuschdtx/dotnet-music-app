@@ -17,7 +17,7 @@ namespace Music_app.Api.Configurations
         public static IServiceCollection AddInfrastructure(this IServiceCollection services)
         {
             services.Scan(scan => scan.FromAssemblies(AssemblyReference.assembly,
-                    Domain.AssemblyReference.assembly)
+                    Domain.AssemblyReference.assembly, Application.AssemblyReference.assembly)
                 .AddClasses(false)
                 .UsingRegistrationStrategy(RegistrationStrategy.Skip)
                 .AsImplementedInterfaces()
