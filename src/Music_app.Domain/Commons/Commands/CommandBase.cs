@@ -1,4 +1,6 @@
-﻿namespace Music_app.Domain.Commons.Commands
+﻿using Music_app.Domain.Extensions;
+
+namespace Music_app.Domain.Commons.Commands
 {
     public class CommandBase : ICommand
     {
@@ -30,14 +32,14 @@
         public Guid userId { get; private set; }
         public Guid id { get; private set; }
 
-        public void SetUserId(Guid userId)
+        public void SetUserId(string userId)
         {
-            this.userId = userId;
+            this.userId = GuidExtension.GetGuid(userId);
         }
 
-        public void SetId(Guid id)
+        public void SetId(string id)
         {
-            this.id = id;
+            this.id = GuidExtension.GetGuid(id);
         }
     }
 }

@@ -79,7 +79,7 @@ app.UseStaticFiles();
 
 app.UseAuthentication();
 
-app.UseMiddleware<ValidationExceptionHandlingMiddleware>();
+app.UseMiddleware<ExceptionHandlingMiddleware>();
 
 app.UseAuthorization();
 

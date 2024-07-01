@@ -1,6 +1,7 @@
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 using Music_app.Domain.Entities;
+using Music_app.Domain.Enums;
 
 namespace Music_app.Infrastructure.Data.EntityConfigurations
 {
@@ -26,8 +27,8 @@ namespace Music_app.Infrastructure.Data.EntityConfigurations
             builder.Property(t => t.name)
                 .IsRequired()
                 .HasColumnName("name")
-                .HasColumnType("character varying(255)")
-                .HasMaxLength(255);
+                .HasConversion(v => v.ToString(), v => (RoleTypeEnum)System.Enum.Parse(typeof(RoleTypeEnum), v))
+                .HasColumnType("character varying(255)");
 
             builder.Property(t => t.description)
                 .HasColumnName("description")

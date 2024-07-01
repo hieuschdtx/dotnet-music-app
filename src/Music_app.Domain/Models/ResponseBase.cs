@@ -36,4 +36,10 @@
 
         public int id { get; set; }
     }
+    public class ErrorResponse
+    {
+        public int statusCode { get; set; }
+        public string message { get; set; }
+        public List<ResponseBase> errors { get; set; }
+    }
 }

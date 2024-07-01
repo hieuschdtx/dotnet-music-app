@@ -1,6 +1,54 @@
-﻿services:
+﻿version: '3.8'
+
+services:
   music_app.api:
-    image: music_app.api
+    image: music_app.api:latest
+    container_name: music_app.api
     build:
       context: .
-      dockerfile: Music_app.Api/Dockerfile
+      dockerfile: Dockerfile
+    ports:
+      - "5000:5000"
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Development
+    volumes:
+      - ./Music_app.Api/appsettings.json:/app/appsettings.json:ro
+    depends_on:
+      - postgres
+      - pgadmin
+    networks:
+      - my-network
+
+  postgres:
+    image: postgres:latest
+    container_name: postgres
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: Passw0rd!
+      POSTGRES_DB: pg_musicdb
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres-data:/var/lib/postgresql/data:ro
+    networks:
+      - my-network
+
+  pgadmin:
+    image: dpage/pgadmin4:latest
+    container_name: pgadmin
+    environment:
+      - PGADMIN_DEFAULT_EMAIL=vonghieu110902@gmail.com
+      - PGADMIN_DEFAULT_PASSWORD=110902
+    ports:
+      - "5050:80"
+    depends_on:
+      - postgres
+    networks:
+      - my-network
+
+networks:
+  my-network:
+    driver: bridge
+
+volumes:
+  postgres-data:
